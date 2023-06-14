@@ -1,28 +1,22 @@
-// var url = require('url');
-// var adr = 'http://localhost:8080/default.htm?year=2017&month=february';
-// var q = url.parse(adr, true);
+// var fs = require('fs');
+// var events = require('events');
+// var eventEmitter = new events.EventEmitter();
 
-// console.log(q.host); //returns 'localhost:8080'
-// console.log(q.pathname); //returns '/default.htm'
-// console.log(q.search); //returns '?year=2017&month=february'
+// var rs = fs.createReadStream('./demofile.txt');
+// rs.on('open', function () {
+//   console.log('The file is open');
+// });
 
-// var qdata = q.query; //returns an object: { year: 2017, month: 'february' }
-// console.log(qdata.month); //returns 'february'
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
 
-var http = require('http');
-var url = require('url');
-var fs = require('fs');
+//Create an event handler:
+var myEventHandler = function () {
+  console.log('I hear a scream!');
+}
 
-http.createServer(function (req, res) {
-  var q = url.parse(req.url, true);
-  var filename = "." + q.pathname;
-  fs.readFile(filename, function(err, data) {
-    if (err) {
-      res.writeHead(404, {'Content-Type': 'text/html'});
-      return res.end("404 Not Found");
-    } 
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write(data);
-    return res.end();
-  });
-}).listen(8080);
+//Assign the event handler to an event:
+eventEmitter.on('scream', myEventHandler);
+
+//Fire the 'scream' event:
+eventEmitter.emit('scream');
